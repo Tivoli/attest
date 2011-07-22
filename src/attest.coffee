@@ -10,6 +10,7 @@ class attest
     patterns:
       email: /^[a-z0-9_.%+\-]+@[0-9a-z.\-]+\.[a-z.]{2,6}$/i
       url: /[a-z][\-\.+a-z]*:\/\//i
+      number: /^\d+$/
   
   constructor: (form, options) ->
     @form = $(form)
