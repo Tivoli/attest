@@ -56,7 +56,7 @@
           el.removeClass(this.options.errorClass);
         }
       }
-      pattern = el.attr('pattern') ? new RegExp(el.attr('pattern'), this.options.modifiers) : this.options.patterns[el.attr('type')] ? new RegExp(this.options.patterns[el.attr('type')]) : void 0;
+      pattern = el.attr('pattern') ? new RegExp(el.attr('pattern'), this.options.modifiers) : this.options.patterns[el.attr('type')] ? this.options.patterns[el.attr('type')] : void 0;
       if (pattern) {
         if (pattern.test(el.val())) {
           el.removeClass(this.options.errorClass);
@@ -66,6 +66,11 @@
         }
       }
       return null;
+    };
+    attest.prototype._option = function(key, value) {
+      if ($.isPlainObject(key)) {
+        return this.options = $.extend(true, this.options, key);
+      }
     };
     attest.prototype.validate = function() {
       return this.fields.map(__bind(function(idx, field) {
@@ -88,8 +93,8 @@
     returnValue = this;
     this.each(function() {
       var instance, methodValue;
+      instance = $.data(this, 'attest');
       if (isMethodCall) {
-        instance = $.data(this, 'attest');
         if (!instance) {
           return $.error("cannot call methods on attest prior to initialization; attempted to call method '" + options + "'");
         }
@@ -102,7 +107,11 @@
           return false;
         }
       } else {
-        return $.data(this, 'attest', new attest(this, options));
+        if (instance) {
+          return instance._option(options || {});
+        } else {
+          return $.data(this, 'attest', new attest(this, options));
+        }
       }
     });
     return returnValue;

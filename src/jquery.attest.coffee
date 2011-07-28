@@ -47,7 +47,7 @@ class attest
     pattern = if el.attr('pattern')
       new RegExp el.attr('pattern'), @options.modifiers
     else if @options.patterns[el.attr('type')]
-      new RegExp @options.patterns[el.attr('type')]
+      @options.patterns[el.attr('type')]
     if pattern
       if pattern.test(el.val())
         el.removeClass(@options.errorClass)
@@ -55,6 +55,10 @@ class attest
         el.addClass(@options.errorClass)
         return true
     null
+    
+  _option: (key, value) ->
+    if $.isPlainObject(key)
+      @options = $.extend(true, @options, key)
     
   validate: ->
     @fields.map (idx, field) =>
@@ -68,8 +72,8 @@ jQuery.fn.attest = (options) ->
   returnValue = this
   
   this.each ->
+    instance = $.data this, 'attest'
     if isMethodCall
-      instance = $.data this, 'attest'
       return $.error "cannot call methods on attest prior to initialization; attempted to call method '#{options}'" if !instance
       return $.error "no such method '#{options}' for attest instance" if !$.isFunction(instance[options]) || options.charAt(0) == "_"
       methodValue = instance[options].apply instance, args
@@ -79,5 +83,8 @@ jQuery.fn.attest = (options) ->
         else methodValue)
         return false
     else
-	    $.data this, 'attest', new attest(this, options)
+      if instance
+        instance._option options or {}
+      else
+  	    $.data this, 'attest', new attest(this, options)
   returnValue
