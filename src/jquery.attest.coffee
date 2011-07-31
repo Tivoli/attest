@@ -11,21 +11,21 @@ class attest
       email: /^[a-z0-9_.%+\-]+@[0-9a-z.\-]+\.[a-z.]{2,6}$/i
       url: /[a-z][\-\.+a-z]*:\/\//i
       number: /^\d+$/
-  
+
   constructor: (form, options) ->
     @form = $(form)
     @options = $.extend true, {}, @defaults, options
     @fields = @form.find(@options.nodes).not(@options.ignored)
     @submit = @form.find(@options.submit)
     @_bindings()
-    
+
   _bindings: ->
     @fields.each (idx, el) =>
       $(el).bind 'blur keyup keydown', (e) =>
         el = $(e.target)
         invalid = @_isRequired(el) or @_isValid(el) or @validate().length > 0
         @submit.attr 'disabled', if invalid then 'disabled' else null
-          
+
   _isRequired: (el) ->
     required = el.attr('required')
     val = el.val()
@@ -35,7 +35,7 @@ class attest
     else
       el.removeClass @options.requiredClass
     null
-    
+
   _isValid: (el) ->
     if el.data('match')
       match = @form.find el.data('match')
@@ -55,11 +55,11 @@ class attest
         el.addClass(@options.errorClass)
         return true
     null
-    
+
   _option: (key, value) ->
     if $.isPlainObject(key)
       @options = $.extend(true, @options, key)
-    
+
   validate: ->
     @fields.map (idx, field) =>
       el = $(field)
@@ -70,7 +70,7 @@ jQuery.fn.attest = (options) ->
   isMethodCall = typeof options == "string"
   args = Array.prototype.slice.call arguments, 1
   returnValue = this
-  
+
   this.each ->
     instance = $.data this, 'attest'
     if isMethodCall
@@ -86,5 +86,5 @@ jQuery.fn.attest = (options) ->
       if instance
         instance._option options or {}
       else
-  	    $.data this, 'attest', new attest(this, options)
+        $.data this, 'attest', new attest(this, options)
   returnValue
