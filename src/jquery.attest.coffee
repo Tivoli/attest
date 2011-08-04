@@ -23,6 +23,7 @@ class attest
     @fields.each (idx, el) =>
       $(el).bind 'blur keyup keydown', (e) =>
         el = $(e.target)
+        return unless e.type == 'blur' or el.hasClass 'error'
         invalid = @_isRequired(el) or @_isValid(el) or @validate().length > 0
         @submit.attr 'disabled', if invalid then 'disabled' else null
 

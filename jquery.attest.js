@@ -28,6 +28,9 @@
         return $(el).bind('blur keyup keydown', __bind(function(e) {
           var invalid;
           el = $(e.target);
+          if (!(e.type === 'blur' || el.hasClass('error'))) {
+            return;
+          }
           invalid = this._isRequired(el) || this._isValid(el) || this.validate().length > 0;
           return this.submit.attr('disabled', invalid ? 'disabled' : null);
         }, this));
