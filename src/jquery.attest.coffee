@@ -18,7 +18,7 @@ class attest
     @fields = @form.find(@options.nodes).not(@options.ignored)
     @submit = @form.find(@options.submit)
     @_bindings()
-    @form.bind 'keypress', (e) =>
+    @form.bind 'keypress submit', (e) =>
       return false if e.which is 13 and @validate.length isnt 0
 
   _bindings: ->
@@ -77,7 +77,7 @@ jQuery.fn.attest = (options) ->
   this.each ->
     instance = $.data this, 'attest'
     if isMethodCall
-      return $.error "cannot call methods on attest prior to initialization; attempted to call method '#{options}'" if !instance
+      return $.error "cannot call methods on attest prior to initialization; attempted to call method '#{options}'" unless instance
       return $.error "no such method '#{options}' for attest instance" if !$.isFunction(instance[options]) || options.charAt(0) == "_"
       methodValue = instance[options].apply instance, args
       if methodValue? and methodValue != instance
