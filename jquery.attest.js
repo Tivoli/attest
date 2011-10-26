@@ -22,7 +22,10 @@
       this.fields = this.form.find(this.options.nodes).not(this.options.ignored);
       this.submit = this.form.find(this.options.submit);
       this._bindings();
-      this.form.bind('keypress', __bind(function(e) {
+      this.form.live('keypress submit', __bind(function(e) {
+        if (this.validate().length) {
+          return false;
+        }
         if (e.which === 13 && this.validate().length) {
           return false;
         }
@@ -85,6 +88,9 @@
         var el, invalid;
         el = $(field);
         invalid = this._isRequired(el) || this._isValid(el);
+        if (invalid) {
+          el.addClass(this.options.errorClass);
+        }
         if (invalid) {
           return field;
         } else {

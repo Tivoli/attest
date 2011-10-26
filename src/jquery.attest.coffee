@@ -18,7 +18,8 @@ class attest
     @fields = @form.find(@options.nodes).not(@options.ignored)
     @submit = @form.find(@options.submit)
     @_bindings()
-    @form.bind 'keypress', (e) =>
+    @form.live 'keypress submit', (e) =>
+      return false if @validate().length
       return false if e.which is 13 and @validate().length
 
   _bindings: ->
@@ -67,6 +68,7 @@ class attest
     @fields.map (idx, field) =>
       el = $(field)
       invalid = @_isRequired(el) or @_isValid(el)
+      el.addClass(@options.errorClass) if invalid
       if invalid then field else null
 
 jQuery.fn.attest = (options) ->
