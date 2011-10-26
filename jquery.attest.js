@@ -22,10 +22,12 @@
       this.fields = this.form.find(this.options.nodes).not(this.options.ignored);
       this.submit = this.form.find(this.options.submit);
       this._bindings();
-      this.form.live('keypress submit', __bind(function(e) {
+      this.submit.bind('click', __bind(function(e) {
         if (this.validate().length) {
           return false;
         }
+      }, this));
+      this.form.bind('keypress', __bind(function(e) {
         if (e.which === 13 && this.validate().length) {
           return false;
         }
