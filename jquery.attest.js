@@ -22,8 +22,8 @@
       this.fields = this.form.find(this.options.nodes).not(this.options.ignored);
       this.submit = this.form.find(this.options.submit);
       this._bindings();
-      this.form.live('keypress submit', __bind(function(e) {
-        if (e.which === 13 && this.validate.length !== 0) {
+      this.form.bind('keypress', __bind(function(e) {
+        if (e.which === 13 && this.validate().length) {
           return false;
         }
       }, this));
@@ -36,7 +36,7 @@
           if (!(e.type === 'blur' || el.hasClass('error'))) {
             return;
           }
-          invalid = this._isRequired(el) || this._isValid(el) || this.validate().length > 0;
+          invalid = this._isRequired(el) || this._isValid(el) || this.validate().length;
           return this.submit.attr('disabled', invalid ? 'disabled' : null);
         }, this));
       }, this));

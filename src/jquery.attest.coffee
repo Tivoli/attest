@@ -18,15 +18,15 @@ class attest
     @fields = @form.find(@options.nodes).not(@options.ignored)
     @submit = @form.find(@options.submit)
     @_bindings()
-    @form.live 'keypress submit', (e) =>
-      return false if e.which is 13 and @validate.length isnt 0
+    @form.bind 'keypress', (e) =>
+      return false if e.which is 13 and @validate().length
 
   _bindings: ->
     @fields.each (idx, el) =>
       $(el).bind 'blur keyup keydown', (e) =>
         el = $(e.target)
         return unless e.type == 'blur' or el.hasClass 'error'
-        invalid = @_isRequired(el) or @_isValid(el) or @validate().length > 0
+        invalid = @_isRequired(el) or @_isValid(el) or @validate().length
         @submit.attr 'disabled', if invalid then 'disabled' else null
 
   _isRequired: (el) ->
