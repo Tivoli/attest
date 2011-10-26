@@ -18,7 +18,7 @@ class attest
     @fields = @form.find(@options.nodes).not(@options.ignored)
     @submit = @form.find(@options.submit)
     @_bindings()
-    @form.bind 'keypress submit', (e) =>
+    @form.live 'keypress submit', (e) =>
       return false if e.which is 13 and @validate.length isnt 0
 
   _bindings: ->
