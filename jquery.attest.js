@@ -27,23 +27,20 @@
           return false;
         }
       }, this));
-      this.form.bind('keypress', __bind(function(e) {
+      this.form.bind('submit', __bind(function(e) {
         if (e.which === 13 && this.validate().length) {
           return false;
         }
       }, this));
     }
     attest.prototype._bindings = function() {
-      return this.fields.each(__bind(function(idx, el) {
-        return $(el).bind('blur keyup keydown', __bind(function(e) {
-          var invalid;
-          el = $(e.target);
-          if (!(e.type === 'blur' || el.hasClass('error'))) {
-            return;
-          }
-          invalid = this._isRequired(el) || this._isValid(el) || this.validate().length;
-          return this.submit.attr('disabled', invalid ? 'disabled' : null);
-        }, this));
+      return this.fields.bind('blur keyup keydown', __bind(function(e) {
+        var el, invalid;
+        el = $(e.currentTarget);
+        if (!(e.type === 'blur' || el.hasClass('error'))) {
+          return;
+        }
+        return invalid = this._isRequired(el) || this._isValid(el);
       }, this));
     };
     attest.prototype._isRequired = function(el) {

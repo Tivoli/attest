@@ -20,16 +20,14 @@ class attest
     @_bindings()
     @submit.bind 'click', (e) =>
       return false if @validate().length
-    @form.bind 'keypress', (e) =>
+    @form.bind 'submit', (e) =>
       return false if e.which is 13 and @validate().length
 
   _bindings: ->
-    @fields.each (idx, el) =>
-      $(el).bind 'blur keyup keydown', (e) =>
-        el = $(e.target)
+    @fields.bind 'blur keyup keydown', (e) =>
+        el = $(e.currentTarget)
         return unless e.type == 'blur' or el.hasClass 'error'
-        invalid = @_isRequired(el) or @_isValid(el) or @validate().length
-        @submit.attr 'disabled', if invalid then 'disabled' else null
+        invalid = @_isRequired(el) or @_isValid(el)
 
   _isRequired: (el) ->
     required = el.attr('required')
